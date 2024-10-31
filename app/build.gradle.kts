@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.mad2"
+    namespace = "com.example.travelapp" // Update to match your package structure
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.mad2"
+        applicationId = "com.example.travelapp" // Update to match your package structure
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -54,13 +54,17 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-tooling-preview")
 
-    // Jetpack Compose Navigation
-    implementation("androidx.navigation:navigation-compose:2.8.3")
+    val nav_version = "2.8.3"
+
+    // Jetpack Navigation
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    // Testing Navigation
+    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
