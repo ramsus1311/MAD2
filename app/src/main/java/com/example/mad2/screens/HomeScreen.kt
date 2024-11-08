@@ -25,18 +25,6 @@ fun HomeScreen(navController: NavHostController) {
                 verticalArrangement = Arrangement.Center // Center content vertically
             ) {
                 Text(text = "Welcome to the Home Screen", style = MaterialTheme.typography.bodyLarge)
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { navController.navigate("tripDetails") }) {
-                    Text("Go to Trip Details")
-                }
-                Spacer(modifier = Modifier.height(16.dp)) // Add space between buttons
-                Button(onClick = { navController.navigate("explore") }) {
-                    Text("Explore")
-                }
-                Spacer(modifier = Modifier.height(16.dp)) // Add space between buttons
-                Button(onClick = { navController.navigate("profile") }) {
-                    Text("Profile")
-                }
             }
         }
     }

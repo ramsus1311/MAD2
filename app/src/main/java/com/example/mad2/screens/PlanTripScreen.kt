@@ -10,7 +10,7 @@ import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExploreScreen(navController: NavHostController) {
+fun PlanTripScreen(navController: NavHostController) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Explore") }) }
     ) { innerPadding ->
@@ -21,7 +21,7 @@ fun ExploreScreen(navController: NavHostController) {
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "Welcome to the Explore Screen", style = MaterialTheme.typography.bodyLarge)
+                Text(text = "Welcome to the Plan trip Screen", style = MaterialTheme.typography.bodyLarge)
 
             }
         }
