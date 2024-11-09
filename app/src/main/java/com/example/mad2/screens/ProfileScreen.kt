@@ -5,6 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
@@ -20,9 +21,34 @@ fun ProfileScreen(navController: NavHostController) {
                 .padding(innerPadding),
             contentAlignment = Alignment.Center
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "Welcome to the Profile Screen", style = MaterialTheme.typography.bodyLarge)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Text(
+                    text = "Welcome to the Profile Screen",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
 
+                // Spacer to push the button to the bottom
+                Spacer(modifier = Modifier.weight(1f))
+
+                // Logout button with red background
+                Button(
+                    onClick = {
+                        // Handle logout logic here
+                    },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(0.5f) // Set button width to 50% of the screen
+                        .align(Alignment.CenterHorizontally), // Center the button
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Red // Set the button background color to red
+                    )
+                ) {
+                    Text(text = "Logout", color = Color.White) // Set text color to white for contrast
+                }
             }
         }
     }
