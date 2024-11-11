@@ -21,8 +21,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.mad2.screens.CreateUserScreen
 import com.example.travelapp.screens.*
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +49,9 @@ fun TravelApp() {
             composable("tripDetails") { TripDetailsScreen(navController) }
             composable("planTrip") { PlanTripScreen(navController) }
             composable("profile") { ProfileScreen(navController) }
-            composable("user") { CreateUserScreen() }
+            composable("login") {
+                LoginScreen(auth = FirebaseAuth.getInstance(), navController = navController)
+            }
         }
     }
 }

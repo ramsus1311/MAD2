@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "6615391190",
+    "project_id": "colombus-b238b",
+    "storage_bucket": "colombus-b238b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:6615391190:android:b897ceed46d8eb10452277",
+        "android_client_info": {
+          "package_name": "com.example.travelapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDr4OB9Scij0JVUGfz-rWKRkvSnzSespDw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -56,12 +56,12 @@ fun HomeScreen(navController: NavHostController) {
                 )
                 Spacer(modifier = Modifier.height(16.dp)) // Add spacing before button
                 Button(
-                    onClick = { navController.navigate("user") },
+                    onClick = { navController.navigate("login") },
                     modifier = Modifier
                         .padding(16.dp)
                         .align(Alignment.CenterHorizontally)
                 ) {
-                    Text("Create New User")
+                    Text("Login")
                 }
                 Spacer(modifier = Modifier.weight(1f)) // Pushes the button down
             }
