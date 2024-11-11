@@ -1,1 +1,5 @@
-dette bliver vredens bedste travel companion app
+Testuser:
+
+Username: test@test.com
+
+Password: test123
