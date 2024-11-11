@@ -21,6 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.mad2.screens.CreateUserScreen
 import com.example.travelapp.screens.*
 
 class MainActivity : ComponentActivity() {
@@ -48,6 +49,7 @@ fun TravelApp() {
             composable("tripDetails") { TripDetailsScreen(navController) }
             composable("planTrip") { PlanTripScreen(navController) }
             composable("profile") { ProfileScreen(navController) }
+            composable("user") { CreateUserScreen() }
         }
     }
 }

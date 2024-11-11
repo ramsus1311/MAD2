@@ -7,12 +7,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.travelapp.R
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,9 +35,10 @@ fun HomeScreen(navController: NavHostController) {
             )
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxSize()
             ) {
-                Spacer(modifier = Modifier.weight(1f)) // This pushes the text downward
+                Spacer(modifier = Modifier.weight(1f)) // Pushes the content downward
                 Text(
                     text = "Discover exciting locations, check the weather, and plan your next " +
                             "adventure with ease. Whether you're looking for scenic spots or " +
@@ -54,8 +54,17 @@ fun HomeScreen(navController: NavHostController) {
                         .fillMaxWidth() // Ensure it uses full width for proper centering
                         .wrapContentWidth(Alignment.CenterHorizontally) // Ensure centering
                 )
+                Spacer(modifier = Modifier.height(16.dp)) // Add spacing before button
+                Button(
+                    onClick = { navController.navigate("user") },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Text("Create New User")
+                }
+                Spacer(modifier = Modifier.weight(1f)) // Pushes the button down
             }
         }
     }
 }
-
