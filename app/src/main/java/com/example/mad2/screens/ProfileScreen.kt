@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.google.firebase.auth.FirebaseAuth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,7 +38,14 @@ fun ProfileScreen(navController: NavHostController) {
                 // Logout button with red background
                 Button(
                     onClick = {
-                        // Handle logout logic here
+                        // Sign out the user from Firebase
+                        FirebaseAuth.getInstance().signOut()
+
+                        // Navigate to the login screen
+                        navController.navigate("login") {
+                            // Pop the Profile screen off the stack to prevent back navigation
+                            popUpTo("home") { inclusive = true }
+                        }
                     },
                     modifier = Modifier
                         .padding(16.dp)
