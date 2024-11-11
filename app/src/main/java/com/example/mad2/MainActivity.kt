@@ -15,6 +15,8 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Search // For Explore
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -23,6 +25,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.travelapp.screens.*
 import com.google.firebase.auth.FirebaseAuth
+import androidx.compose.runtime.LaunchedEffect // Import LaunchedEffect
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,13 +39,29 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TravelApp() {
     val navController = rememberNavController()
+    val auth = FirebaseAuth.getInstance()
+    val currentUser = auth.currentUser
+
+    // Declare state using mutableStateOf, without 'by'
+    val startDestination = remember { mutableStateOf("login") }
+
+    // Wait for the Firebase user state to initialize
+    LaunchedEffect(currentUser) {
+        // Wait until Firebase has fully initialized the user state
+        // Only change the startDestination after Firebase has finished its check
+        if (currentUser != null) {
+            startDestination.value = "home"
+        } else {
+            startDestination.value = "login"
+        }
+    }
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = "home",
+            startDestination = startDestination.value, // Use .value to access the state
             modifier = Modifier.padding(paddingValues)
         ) {
             composable("home") { HomeScreen(navController) }
@@ -50,11 +69,12 @@ fun TravelApp() {
             composable("planTrip") { PlanTripScreen(navController) }
             composable("profile") { ProfileScreen(navController) }
             composable("login") {
-                LoginScreen(auth = FirebaseAuth.getInstance(), navController = navController)
+                LoginScreen(auth = auth, navController = navController)
             }
         }
     }
 }
+
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {

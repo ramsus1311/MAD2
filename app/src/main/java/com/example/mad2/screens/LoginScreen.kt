@@ -89,7 +89,9 @@ fun LoginScreen(auth: FirebaseAuth, navController: NavController) {
                             ).show()
 
                             // Navigate to the home screen or other screen
-                            navController.navigate("home")
+                            navController.navigate("home") {
+                                popUpTo("login") { inclusive = true } // Pop login from back stack
+                            }
                         } else {
                             // Failed to sign in
                             errorMessage = "Authentication failed. Please check your credentials."
@@ -110,11 +112,4 @@ fun LoginScreen(auth: FirebaseAuth, navController: NavController) {
             Text(text = "Don't have an account? Sign up", style = MaterialTheme.typography.body2)
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewLoginScreen() {
-    // This is just a preview to see how the screen would look in the UI tool
-    LoginScreen(auth = FirebaseAuth.getInstance(), navController = rememberNavController())
 }
