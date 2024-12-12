@@ -1,29 +1,27 @@
-package com.example.travelapp.screens
+package com.example.mad2.screens // Ensure the package is correct
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding // If you need padding
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import androidx.compose.ui.Modifier // Add Modifier import here
+import androidx.compose.ui.unit.dp // Add dp import here
+import androidx.navigation.NavController
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlanTripScreen(navController: NavHostController) {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text("Explore") }) }
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "Welcome to the Plan trip Screen", style = MaterialTheme.typography.bodyLarge)
+fun PlanTripScreen(navController: NavController) {
+    // Add your PlanTripScreen UI components here
+    Column(modifier = Modifier.padding(16.dp)) { // Example of using padding
+        Text(text = "Plan Your Trip")
+        Spacer(modifier = Modifier.height(16.dp)) // Use Modifier to define spacing
+        // Add more UI elements as necessary
 
-            }
+        // Example of a button to go back to the home screen
+        Button(onClick = { navController.navigate("home") }) {
+            Text(text = "Go Back to Home")
         }
     }
 }

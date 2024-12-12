@@ -4,15 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Search // For Explore
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -22,11 +18,22 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mad2.screens.CreateUserScreen
-import com.example.travelapp.screens.*
+import com.example.mad2.screens.PlanTripScreen
+import com.example.mad2.screens.SearchScreen
+import com.example.mad2.viewmodel.CitysearchViewModel
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.context.startKoin
+import com.example.mad2.di.appModule
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Start Koin
+        startKoin {
+            modules(appModule) // Make sure the Koin module is properly set up
+        }
+
         setContent {
             TravelApp()
         }
@@ -46,8 +53,8 @@ fun TravelApp() {
             modifier = Modifier.padding(paddingValues)
         ) {
             composable("home") { HomeScreen(navController) }
-            composable("tripDetails") { TripDetailsScreen(navController) }
             composable("planTrip") { PlanTripScreen(navController) }
+            composable("search") { SearchScreen(viewModel = koinViewModel(), navController = navController) }
             composable("profile") { ProfileScreen(navController) }
             composable("user") { CreateUserScreen() }
         }
@@ -58,8 +65,7 @@ fun TravelApp() {
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
         BottomNavItem("home", "Home", Icons.Default.Home),
-        BottomNavItem("PlanTrip", "Plan Trip", Icons.Default.Search),
-        BottomNavItem("tripDetails", "Trip Details", Icons.Default.AccountCircle),
+        BottomNavItem("planTrip", "Plan Trip", Icons.Default.Search),
         BottomNavItem("profile", "Profile", Icons.Default.AccountCircle)
     )
 
