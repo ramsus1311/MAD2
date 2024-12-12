@@ -1,5 +1,8 @@
 package com.example.travelapp
 
+
+import ProfileScreen
+import UserData
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -71,6 +74,14 @@ fun TravelApp() {
             composable("login") {
                 LoginScreen(auth = auth, navController = navController)
             }
+            composable("profile") {
+                val dummyData = UserData(
+                    name = "John Doe",
+                    email = "john@example.com",
+                    phoneNumber = "123-456-7890"
+                )
+                ProfileScreen(logout = { }, navController = navController, userData = dummyData) }
+            composable("user") { CreateUserScreen() }
         }
     }
 }
