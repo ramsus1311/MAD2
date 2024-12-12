@@ -17,28 +17,34 @@ import com.example.travelapp.R
 @Composable
 fun HomeScreen(navController: NavHostController) {
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Home") }) }
+        topBar = {
+            TopAppBar(
+                title = { Text("Home") },
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
+            )
+        }
     ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
-            contentAlignment = Alignment.Center
+                .padding(innerPadding)
         ) {
-            // Insert the drawable image
             Image(
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = "Home Background",
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 250.dp) // Move the image upwards
+                    .padding(bottom = 250.dp)
             )
+
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 450.dp)
             ) {
-                Spacer(modifier = Modifier.weight(1f)) // Pushes the content downward
                 Text(
                     text = "Discover exciting locations, check the weather, and plan your next " +
                             "adventure with ease. Whether you're looking for scenic spots or " +
@@ -46,24 +52,15 @@ fun HomeScreen(navController: NavHostController) {
                             "ensures you're prepared for the weather. Start exploring today " +
                             "and make your next trip unforgettable!",
                     style = MaterialTheme.typography.bodyLarge.copy(
-                        fontSize = 20.sp, // Increase text size
-                        fontWeight = FontWeight.SemiBold // Make text bold
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        lineHeight = 28.sp
                     ),
                     modifier = Modifier
-                        .padding(top = 16.dp) // Adjust spacing for the text
-                        .fillMaxWidth() // Ensure it uses full width for proper centering
-                        .wrapContentWidth(Alignment.CenterHorizontally) // Ensure centering
+                        .padding(horizontal = 24.dp)
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.CenterHorizontally)
                 )
-                Spacer(modifier = Modifier.height(16.dp)) // Add spacing before button
-                Button(
-                    onClick = { navController.navigate("login") },
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(Alignment.CenterHorizontally)
-                ) {
-                    Text("Login")
-                }
-                Spacer(modifier = Modifier.weight(1f)) // Pushes the button down
             }
         }
     }
