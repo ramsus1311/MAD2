@@ -70,18 +70,23 @@ fun TravelApp() {
             composable("home") { HomeScreen(navController) }
             composable("tripDetails") { TripDetailsScreen(navController) }
             composable("planTrip") { PlanTripScreen(navController) }
-            composable("profile") { ProfileScreen(navController) }
             composable("login") {
                 LoginScreen(auth = auth, navController = navController)
             }
             composable("profile") {
-                val dummyData = UserData(
-                    name = "John Doe",
-                    email = "john@example.com",
-                    phoneNumber = "123-456-7890"
-                )
+                val user = FirebaseAuth.getInstance().currentUser
+                let dummyData = null
+                if(user != null)
+                {
+                    dummyData = UserData(
+                        name = user.displayName ?: "No Name",  // If displayName is null, use "No Name"
+                        email = user.email ?: "No Email",      // If email is null, use "No Email"
+                        phoneNumber = user.phoneNumber ?: "No Phone Number" // If phoneNumber is null, use "No Phone Number"
+                    )
+                }
+                println("Email: $user?.email")
+
                 ProfileScreen(logout = { }, navController = navController, userData = dummyData) }
-            composable("user") { CreateUserScreen() }
         }
     }
 }

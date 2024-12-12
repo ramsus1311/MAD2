@@ -12,6 +12,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.layout.ContentScale
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
+import androidx.compose.ui.res.painterResource
+import com.example.travelapp.R
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.example.mad2.ui.theme.MAD2Theme
+
+data class UserData(
+    val name: String,
+    val email: String,
+    val phoneNumber: String
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,6 +42,7 @@ fun ProfileScreen(navController: NavHostController,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize()
             ) {
+
                 Image(
                     painter = painterResource(id = R.drawable.placeholder_avatar),
                     contentDescription = "Profile Picture",
