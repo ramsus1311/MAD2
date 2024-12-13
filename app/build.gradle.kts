@@ -60,6 +60,7 @@ dependencies {
 
     // Material for Compose UI
     implementation("androidx.compose.material:material")
+    implementation(libs.firebase.auth.ktx)
     val nav_version = "2.8.3"
     // Navigation for Jetpack Compose
     implementation("androidx.navigation:navigation-compose:$nav_version")

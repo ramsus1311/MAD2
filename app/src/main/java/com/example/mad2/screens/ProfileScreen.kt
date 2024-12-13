@@ -16,19 +16,14 @@ import androidx.compose.ui.res.painterResource
 import com.example.travelapp.R
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.example.data.models.User
 import com.example.mad2.ui.theme.MAD2Theme
 
-data class UserData(
-    val name: String,
-    val email: String,
-    val phoneNumber: String
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(navController: NavHostController,
-                  userData: UserData,
-                  logout: () -> Unit) {
+                  user: User) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Profile") }) }
     ) { innerPadding ->
@@ -57,15 +52,15 @@ fun ProfileScreen(navController: NavHostController,
                 Column(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp, horizontal = 16.dp)
                 ){
-                    ProfileInfoRow("Name", userData.name)
+                    ProfileInfoRow("Name", user.name)
                     Spacer(modifier = Modifier.height(12.dp))
                     HorizontalDivider()
                     Spacer(modifier = Modifier.height(12.dp))
-                    ProfileInfoRow("Email", userData.email)
+                    ProfileInfoRow("Email", user.email)
                     Spacer(modifier = Modifier.height(12.dp))
                     HorizontalDivider()
                     Spacer(modifier = Modifier.height(12.dp))
-                    ProfileInfoRow("Phone Number", userData.phoneNumber)
+                    ProfileInfoRow("Phone Number", user.phoneNumber)
                     Spacer(modifier = Modifier.height(12.dp))
                     HorizontalDivider()
                     Spacer(modifier = Modifier.height(12.dp))
@@ -119,7 +114,7 @@ private fun ProfileInfoRow(label: String, value: String) {
 @Preview(showBackground = true)
 @Composable
 fun ProfileScreenPreview() {
-    val sampleUserData = UserData(
+    val sampleUser = User(
         name = "Peter fra L'EASY",
         email = "peter@leasy.dk",
         phoneNumber = "88 88 88 88"
@@ -131,8 +126,7 @@ fun ProfileScreenPreview() {
     MAD2Theme { // Replace with your app's theme
         ProfileScreen(
             navController = previewNavController,
-            userData = sampleUserData,
-            logout = { }
+            user = sampleUser
         )
     }
 }

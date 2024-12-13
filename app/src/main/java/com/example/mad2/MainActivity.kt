@@ -2,7 +2,7 @@ package com.example.travelapp
 
 
 import ProfileScreen
-import UserData
+import com.example.data.models.User
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -74,19 +74,12 @@ fun TravelApp() {
                 LoginScreen(auth = auth, navController = navController)
             }
             composable("profile") {
-                val user = FirebaseAuth.getInstance().currentUser
-                let dummyData = null
-                if(user != null)
-                {
-                    dummyData = UserData(
-                        name = user.displayName ?: "No Name",  // If displayName is null, use "No Name"
-                        email = user.email ?: "No Email",      // If email is null, use "No Email"
-                        phoneNumber = user.phoneNumber ?: "No Phone Number" // If phoneNumber is null, use "No Phone Number"
-                    )
-                }
-                println("Email: $user?.email")
-
-                ProfileScreen(logout = { }, navController = navController, userData = dummyData) }
+                val temp = User(
+                    name = currentUser?.displayName.toString(),
+                    email = currentUser?.email.toString(),
+                    phoneNumber = currentUser?.phoneNumber.toString()
+                )
+                ProfileScreen(navController = navController, user = temp) }
         }
     }
 }
