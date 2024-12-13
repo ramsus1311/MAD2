@@ -87,7 +87,12 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
 
+// Retrofit for networking
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
+// Gson for JSON parsing
+    implementation("com.google.code.gson:gson:2.8.9")
 
     // Jetpack Navigation
     implementation("androidx.navigation:navigation-compose:$nav_version")

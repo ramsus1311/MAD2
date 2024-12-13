@@ -29,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.travelapp.screens.*
 import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.runtime.LaunchedEffect // Import LaunchedEffect
+import androidx.navigation.NavHostController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,7 +84,6 @@ fun TravelApp() {
         }
     }
 }
-
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
