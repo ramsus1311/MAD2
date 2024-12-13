@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.travelapp.network.GeoapifyResponse
+import com.example.travelapp.network.GeoapifyGeocodeResponse
 import com.example.travelapp.network.RetrofitInstance
-import com.example.travelapp.network.GeoapifyService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,6 +21,7 @@ import retrofit2.Response
 fun PlanTripScreen(navController: NavHostController) {
     var query by remember { mutableStateOf("") }  // Search query
     var results by remember { mutableStateOf<List<String>>(emptyList()) }  // Search results
+    var cityId by remember { mutableStateOf<String?>(null) } // City ID after geocoding
 
     // Search bar composable
     Column(
@@ -39,9 +40,17 @@ fun PlanTripScreen(navController: NavHostController) {
             onValueChange = { newQuery ->
                 query = newQuery
                 if (newQuery.isNotEmpty()) {
-                    // Call API whenever the query changes
-                    searchPlace(newQuery, "commercial.books", "cityIdHere", "97c1c34c94dd4ee7968e556e2c36ed33", onSuccess = { places ->
-                        results = places
+                    // First, call the Geocoding API to get cityId
+                    getCityIdFromName(newQuery, "97c1c34c94dd4ee7968e556e2c36ed33", onSuccess = { id ->
+                        cityId = id
+                        if (id != null) {
+                            // After getting cityId, call the Places API
+                            searchPlace(newQuery, "commercial.books", id, "97c1c34c94dd4ee7968e556e2c36ed33", onSuccess = { places ->
+                                results = places
+                            }, onFailure = { error ->
+                                Log.e("Geoapify", "Error: $error")
+                            })
+                        }
                     }, onFailure = { error ->
                         Log.e("Geoapify", "Error: $error")
                     })
@@ -62,12 +71,29 @@ fun PlanTripScreen(navController: NavHostController) {
     }
 }
 
+// Function to get the cityId (place_id) from the city name using the Geoapify Geocoding API
+fun getCityIdFromName(cityName: String, apiKey: String, onSuccess: (String?) -> Unit, onFailure: (String) -> Unit) {
+    RetrofitInstance.geoapifyService.getCityId(cityName, apiKey).enqueue(object : Callback<GeoapifyGeocodeResponse> {
+        override fun onResponse(call: Call<GeoapifyGeocodeResponse>, response: Response<GeoapifyGeocodeResponse>) {
+            if (response.isSuccessful) {
+                val cityId = response.body()?.results?.firstOrNull()?.place_id
+                onSuccess(cityId)
+            } else {
+                onFailure("Error: ${response.code()}")
+            }
+        }
+
+        override fun onFailure(call: Call<GeoapifyGeocodeResponse>, t: Throwable) {
+            onFailure("Failure: ${t.message}")
+        }
+    })
+}
+
+// Function to search for places using the cityId obtained from Geocoding
 fun searchPlace(query: String, category: String, cityId: String, apiKey: String, onSuccess: (List<String>) -> Unit, onFailure: (String) -> Unit) {
-    // Call the Geoapify API with the category, cityId, and apiKey
     RetrofitInstance.geoapifyService.searchPlace(category, "place:$cityId", 20, 0, apiKey).enqueue(object : Callback<GeoapifyResponse> {
         override fun onResponse(call: Call<GeoapifyResponse>, response: Response<GeoapifyResponse>) {
             if (response.isSuccessful) {
-                // Extract place names from the response
                 val places = response.body()?.results?.map { it.formatted } ?: emptyList()
                 onSuccess(places)
             } else {
