@@ -1,29 +1,30 @@
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.layout.ContentScale
-import androidx.navigation.NavHostController
-import com.google.firebase.auth.FirebaseAuth
-import androidx.compose.ui.res.painterResource
-import com.example.travelapp.R
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavHostController
+import com.example.travelapp.R
 import com.example.data.models.User
-import com.example.mad2.ui.theme.MAD2Theme
-
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(navController: NavHostController,
-                  user: User) {
+fun ProfileScreen(navController: NavHostController, user: User) {
+    var name by remember { mutableStateOf(user.name) }
+    var phoneNumber by remember { mutableStateOf(user.phoneNumber) }
+
     Scaffold(
         topBar = { TopAppBar(title = { Text("Profile") }) }
     ) { innerPadding ->
@@ -37,38 +38,46 @@ fun ProfileScreen(navController: NavHostController,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize()
             ) {
-
                 Image(
                     painter = painterResource(id = R.drawable.placeholder_avatar),
                     contentDescription = "Profile Picture",
                     modifier = Modifier
                         .size(250.dp)
                         .padding(top = 24.dp)
-                        .clip(CircleShape)
-                        .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape),
-                    contentScale = ContentScale.Crop
                 )
 
-                Column(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp, horizontal = 16.dp)
-                ){
-                    ProfileInfoRow("Name", user.name)
-                    Spacer(modifier = Modifier.height(12.dp))
-                    HorizontalDivider()
-                    Spacer(modifier = Modifier.height(12.dp))
-                    ProfileInfoRow("Email", user.email)
-                    Spacer(modifier = Modifier.height(12.dp))
-                    HorizontalDivider()
-                    Spacer(modifier = Modifier.height(12.dp))
-                    ProfileInfoRow("Phone Number", user.phoneNumber)
-                    Spacer(modifier = Modifier.height(12.dp))
-                    HorizontalDivider()
-                    Spacer(modifier = Modifier.height(12.dp))
-                }
+                // Profile Info Fields
+                TextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = { Text("Name") },
+                    modifier = Modifier.fillMaxWidth().padding(16.dp)
+                )
+
+                TextField(
+                    value = phoneNumber,
+                    onValueChange = { phoneNumber = it },
+                    label = { Text("Phone Number") },
+                    modifier = Modifier.fillMaxWidth().padding(16.dp)
+                )
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                // Logout button with red background
+                // Save Profile Button
+                Button(
+                    onClick = {
+                        // Save the user profile to Firestore
+                        saveUserProfile(User(name, user.email, phoneNumber))
+                    },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(0.5f)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Text(text = "Save Profile", color = Color.White)
+                }
+
+                // Logout Button
                 Button(
                     onClick = {
                         // Sign out the user from Firebase
@@ -95,20 +104,22 @@ fun ProfileScreen(navController: NavHostController,
     }
 }
 
-@Composable
-private fun ProfileInfoRow(label: String, value: String) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(top = 4.dp)
-        )
-    }
+fun saveUserProfile(user: User) {
+    val db = FirebaseFirestore.getInstance()
+    val userRef = db.collection("users").document(user.email)
+
+    val userMap = mapOf(
+        "name" to user.name,
+        "phoneNumber" to user.phoneNumber
+    )
+
+    userRef.set(userMap)
+        .addOnSuccessListener {
+            // Handle success
+        }
+        .addOnFailureListener {
+            // Handle failure
+        }
 }
 
 @Preview(showBackground = true)
@@ -120,14 +131,10 @@ fun ProfileScreenPreview() {
         phoneNumber = "88 88 88 88"
     )
 
-    // Create a dummy NavController for preview
     val previewNavController = rememberNavController()
 
-    MAD2Theme { // Replace with your app's theme
-        ProfileScreen(
-            navController = previewNavController,
-            user = sampleUser
-        )
-    }
+    ProfileScreen(
+        navController = previewNavController,
+        user = sampleUser
+    )
 }
-
