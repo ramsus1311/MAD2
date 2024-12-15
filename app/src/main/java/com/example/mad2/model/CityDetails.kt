@@ -1,4 +1,4 @@
-package com.example.mad2.Model
+package com.example.mad2.model
 
 data class CityDetails(
     val city: String, // NAME

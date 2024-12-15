@@ -1,4 +1,4 @@
-package com.example.travelapp.screens
+package com.example.mad2.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
