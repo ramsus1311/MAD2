@@ -30,6 +30,7 @@ import com.example.travelapp.screens.*
 import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.runtime.LaunchedEffect // Import LaunchedEffect
 import androidx.navigation.NavHostController
+import com.example.mad2.Network.GeoapifyApiHelper
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +46,7 @@ fun TravelApp() {
     val navController = rememberNavController()
     val auth = FirebaseAuth.getInstance()
     val currentUser = auth.currentUser
+    val geoapifyApiHelper = remember { GeoapifyApiHelper("97c1c34c94dd4ee7968e556e2c36ed33") }
 
     // Declare state using mutableStateOf, without 'by'
     val startDestination = remember { mutableStateOf("login") }
@@ -70,7 +72,7 @@ fun TravelApp() {
         ) {
             composable("home") { HomeScreen(navController) }
             composable("tripDetails") { TripDetailsScreen(navController) }
-            composable("planTrip") { PlanTripScreen(navController) }
+            composable("planTrip") { PlanTripScreen(navController, geoapifyApiHelper) }
             composable("login") {
                 LoginScreen(auth = auth, navController = navController)
             }

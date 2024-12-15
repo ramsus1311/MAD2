@@ -59,6 +59,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:21.0.5")
 
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
     // Material for Compose UI
     implementation("androidx.compose.material:material")
