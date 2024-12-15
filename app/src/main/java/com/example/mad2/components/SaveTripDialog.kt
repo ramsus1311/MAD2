@@ -1,12 +1,4 @@
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
@@ -25,7 +17,8 @@ import androidx.compose.ui.unit.sp
 fun SaveTripDialog(
     tripName: String,
     onTripNameChange: (String) -> Unit,
-    onDismissDialog: () -> Unit
+    onDismissDialog: () -> Unit,
+    onSaveTrip: () -> Unit
 ) {
     BasicAlertDialog(onDismissRequest = onDismissDialog) {
         Surface(
@@ -47,10 +40,7 @@ fun SaveTripDialog(
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Button(
-                        onClick = {
-                            onDismissDialog()
-                            TODO() // FIRESTORE IMPL
-                        },
+                        onClick = onSaveTrip,
                         modifier = Modifier.weight(1f)
                     ) {
                         Text("Save")

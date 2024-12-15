@@ -21,8 +21,10 @@ import androidx.compose.ui.unit.sp
 import com.example.mad2.components.DatePickerComponent
 import com.example.mad2.model.CityDetails
 import com.example.mad2.model.PlaceOfInterest
+import com.example.mad2.model.Trip
 import com.example.mad2.network.GeoapifyApiHelper
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,8 +44,6 @@ fun PlanTripScreen(navController: NavHostController, geoapifyApiHelper: Geoapify
 
     var selectedStartDate by remember { mutableStateOf<Long?>(null) }
     var selectedEndDate by remember { mutableStateOf<Long?>(null) }
-
-
 
     Column(
         modifier = Modifier
@@ -98,9 +98,7 @@ fun PlanTripScreen(navController: NavHostController, geoapifyApiHelper: Geoapify
             }
         }
 
-
         Spacer(modifier = Modifier.height(8.dp))
-
 
         LaunchedEffect(selectedCity) {
             if (selectedCity != null) {
@@ -164,25 +162,54 @@ fun PlanTripScreen(navController: NavHostController, geoapifyApiHelper: Geoapify
             SaveTripDialog(
                 tripName = tripName,
                 onTripNameChange = { tripName = it },
-                onDismissDialog = { showDialog = false }
+                onDismissDialog = { showDialog = false },
+                onSaveTrip = {
+                    saveTripToFirestore(
+                        tripName = tripName,
+                        startDate = selectedStartDate!!,
+                        endDate = selectedEndDate!!,
+                        placesOfInterest = selectedPlacesOfInterest,
+                        onComplete = { success ->
+                            if (success) {
+                                Log.d("Firestore", "Trip saved successfully!")
+                                showDialog = false
+                                navController.popBackStack()
+                            } else {
+                                Log.e("Firestore", "Failed to save trip.")
+                            }
+                        }
+                    )
+                }
             )
         }
     }
 }
 
-// Function to save PlacesID to Firestore
-fun savePlacesIDToFirestore(placesID: String, onComplete: (Boolean) -> Unit) {
+fun saveTripToFirestore(
+    tripName: String,
+    startDate: Long,
+    endDate: Long,
+    placesOfInterest: List<PlaceOfInterest>,
+    onComplete: (Boolean) -> Unit
+) {
     val db = FirebaseFirestore.getInstance()
-    val placesRef = db.collection("places").document(placesID)
+    val tripId = UUID.randomUUID().toString()
 
-    // Data to save
-    val data = mapOf("PlacesID" to placesID)
+    val trip = Trip(
+        tripId = tripId,
+        name = tripName,
+        startDate = startDate,
+        endDate = endDate,
+        placesOfInterest = placesOfInterest
+    )
 
-    placesRef.set(data)
+    db.collection("trips").document(tripId)
+        .set(trip)
         .addOnSuccessListener {
             onComplete(true) // Notify success
         }
-        .addOnFailureListener {
+        .addOnFailureListener { e ->
+            Log.e("Firestore", "Error saving trip: ${e.localizedMessage}")
             onComplete(false) // Notify failure
         }
 }
