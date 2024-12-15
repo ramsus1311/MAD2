@@ -1,32 +1,51 @@
 package com.example.mad2.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.layout.ContentScale
-import androidx.navigation.NavHostController
-import com.google.firebase.auth.FirebaseAuth
-import androidx.compose.ui.res.painterResource
-import com.example.travelapp.R
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import com.example.travelapp.R
+import com.example.data.models.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
-import com.example.mad2.model.User
-import com.example.mad2.ui.theme.MAD2Theme
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(navController: NavHostController,
-                  user: User
-) {
+fun ProfileScreen(navController: NavHostController) {
+    val currentUser = FirebaseAuth.getInstance().currentUser
+    val email = currentUser?.email ?: "Unknown Email"
+
+    var name by remember { mutableStateOf("") }
+    var phoneNumber by remember { mutableStateOf("") }
+    var isEditing by remember { mutableStateOf(false) }
+
+    // Fetch user data from Firestore
+    LaunchedEffect(email) {
+        if (email != "Unknown Email") {
+            val db = FirebaseFirestore.getInstance()
+            val userRef = db.collection("users").document(email)
+
+            userRef.get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.exists()) {
+                        name = document.getString("name") ?: ""
+                        phoneNumber = document.getString("phoneNumber") ?: ""
+                    }
+                }
+                .addOnFailureListener {
+                    // Handle failure (e.g., log error)
+                }
+        }
+    }
+
     Scaffold(
         topBar = { TopAppBar(title = { Text("Profile") }) }
     ) { innerPadding ->
@@ -40,97 +59,101 @@ fun ProfileScreen(navController: NavHostController,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize()
             ) {
-
                 Image(
                     painter = painterResource(id = R.drawable.placeholder_avatar),
                     contentDescription = "Profile Picture",
                     modifier = Modifier
                         .size(250.dp)
                         .padding(top = 24.dp)
-                        .clip(CircleShape)
-                        .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape),
-                    contentScale = ContentScale.Crop
                 )
 
-                Column(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp, horizontal = 16.dp)
-                ){
-                    ProfileInfoRow("Name", user.name)
-                    Spacer(modifier = Modifier.height(12.dp))
-                    HorizontalDivider()
-                    Spacer(modifier = Modifier.height(12.dp))
-                    ProfileInfoRow("Email", user.email)
-                    Spacer(modifier = Modifier.height(12.dp))
-                    HorizontalDivider()
-                    Spacer(modifier = Modifier.height(12.dp))
-                    ProfileInfoRow("Phone Number", user.phoneNumber)
-                    Spacer(modifier = Modifier.height(12.dp))
-                    HorizontalDivider()
-                    Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Text(text = "Email: $email", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(16.dp))
+
+                if (isEditing) {
+                    // Editable fields
+                    TextField(
+                        value = name,
+                        onValueChange = { name = it },
+                        label = { Text("Name") },
+                        modifier = Modifier.fillMaxWidth().padding(16.dp)
+                    )
+
+                    TextField(
+                        value = phoneNumber,
+                        onValueChange = { phoneNumber = it },
+                        label = { Text("Phone Number") },
+                        modifier = Modifier.fillMaxWidth().padding(16.dp)
+                    )
+
+                    Button(
+                        onClick = {
+                            isEditing = false
+                            saveUserProfile(User(name, email, phoneNumber))
+                        },
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(0.5f)
+                            .align(Alignment.CenterHorizontally)
+                    ) {
+                        Text(text = "Save", color = Color.White)
+                    }
+                } else {
+                    // Display fields
+                    Text(text = "Name: $name", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(16.dp))
+                    Text(text = "Phone: $phoneNumber", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(16.dp))
+
+                    Button(
+                        onClick = { isEditing = true },
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(0.5f)
+                            .align(Alignment.CenterHorizontally)
+                    ) {
+                        Text(text = "Edit", color = Color.White)
+                    }
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                // Logout button with red background
+                // Logout Button
                 Button(
                     onClick = {
-                        // Sign out the user from Firebase
                         FirebaseAuth.getInstance().signOut()
-
-                        // Navigate to the login screen
                         navController.navigate("login") {
-                            // Pop the Profile screen off the stack to prevent back navigation
                             popUpTo("home") { inclusive = true }
                         }
                     },
                     modifier = Modifier
                         .padding(16.dp)
-                        .fillMaxWidth(0.5f) // Set button width to 50% of the screen
-                        .align(Alignment.CenterHorizontally), // Center the button
+                        .fillMaxWidth(0.5f),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Red // Set the button background color to red
+                        containerColor = Color.Red
                     )
                 ) {
-                    Text(text = "Logout", color = Color.White) // Set text color to white for contrast
+                    Text(text = "Logout", color = Color.White)
                 }
             }
         }
     }
 }
 
-@Composable
-private fun ProfileInfoRow(label: String, value: String) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(top = 4.dp)
-        )
-    }
-}
+fun saveUserProfile(user: User) {
+    val db = FirebaseFirestore.getInstance()
+    val userRef = db.collection("users").document(user.email)
 
-@Preview(showBackground = true)
-@Composable
-fun ProfileScreenPreview() {
-    val sampleUser = User(
-        name = "Peter fra L'EASY",
-        email = "peter@leasy.dk",
-        phoneNumber = "88 88 88 88"
+    val userMap = mapOf(
+        "name" to user.name,
+        "phoneNumber" to user.phoneNumber
     )
 
-    // Create a dummy NavController for preview
-    val previewNavController = rememberNavController()
-
-    MAD2Theme { // Replace with your app's theme
-        ProfileScreen(
-            navController = previewNavController,
-            user = sampleUser
-        )
-    }
+    userRef.set(userMap)
+        .addOnSuccessListener {
+            // Handle success
+        }
+        .addOnFailureListener {
+            // Handle failure
+        }
 }
 

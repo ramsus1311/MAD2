@@ -169,13 +169,19 @@ fun PlanTripScreen(navController: NavHostController, geoapifyApiHelper: Geoapify
     }
 }
 
+// Function to save PlacesID to Firestore
+fun savePlacesIDToFirestore(placesID: String, onComplete: (Boolean) -> Unit) {
+    val db = FirebaseFirestore.getInstance()
+    val placesRef = db.collection("places").document(placesID)
 
+    // Data to save
+    val data = mapOf("PlacesID" to placesID)
 
-
-
-
-
-
-
-
-
+    placesRef.set(data)
+        .addOnSuccessListener {
+            onComplete(true) // Notify success
+        }
+        .addOnFailureListener {
+            onComplete(false) // Notify failure
+        }
+}

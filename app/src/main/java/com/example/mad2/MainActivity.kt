@@ -50,26 +50,15 @@ fun TravelApp() {
     val currentUser = auth.currentUser
     val geoapifyApiHelper = remember { GeoapifyApiHelper("97c1c34c94dd4ee7968e556e2c36ed33") }
 
-    // Declare state using mutableStateOf, without 'by'
-    val startDestination = remember { mutableStateOf("login") }
-
-    // Wait for the Firebase user state to initialize
-    LaunchedEffect(currentUser) {
-        // Wait until Firebase has fully initialized the user state
-        // Only change the startDestination after Firebase has finished its check
-        if (currentUser != null) {
-            startDestination.value = "home"
-        } else {
-            startDestination.value = "login"
-        }
-    }
+    // Handle start destination based on user authentication status
+    val startDestination = if (currentUser != null) "home" else "login"
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = startDestination.value, // Use .value to access the state
+            startDestination = startDestination, // Directly use the computed destination
             modifier = Modifier.padding(paddingValues)
         ) {
             composable("home") { HomeScreen(navController) }
@@ -79,12 +68,16 @@ fun TravelApp() {
                 LoginScreen(auth = auth, navController = navController)
             }
             composable("profile") {
-                val temp = User(
-                    name = currentUser?.displayName.toString(),
-                    email = currentUser?.email.toString(),
-                    phoneNumber = currentUser?.phoneNumber.toString()
-                )
-                ProfileScreen(navController = navController, user = temp) }
+                val user = currentUser?.let {
+                    User(
+                        name = it.displayName ?: "Unknown",
+                        email = it.email ?: "Unknown",
+                        phoneNumber = it.phoneNumber ?: "Unknown"
+                    )
+                } ?: User("Unknown", "Unknown", "Unknown") // Provide default non-null user
+
+                ProfileScreen(navController = navController)
+            }
         }
     }
 }
@@ -93,7 +86,7 @@ fun TravelApp() {
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
         BottomNavItem("home", "Home", Icons.Default.Home),
-        BottomNavItem("PlanTrip", "Plan Trip", Icons.Default.Search),
+        BottomNavItem("planTrip", "Plan Trip", Icons.Default.Search),
         BottomNavItem("tripDetails", "Trip Details", Icons.Default.AccountCircle),
         BottomNavItem("profile", "Profile", Icons.Default.AccountCircle)
     )
@@ -110,6 +103,7 @@ fun BottomNavigationBar(navController: NavController) {
                 onClick = {
                     if (currentDestination != item.route) {
                         navController.navigate(item.route) {
+                            // Save and restore state for better navigation performance
                             popUpTo(navController.graph.startDestinationId) {
                                 saveState = true
                             }

@@ -32,11 +32,23 @@ import com.example.mad2.model.Trip
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
+import com.google.firebase.firestore.FirebaseFirestore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripDetailsScreen(navController: NavHostController) {
+    // State to hold the list of places
+    var places by remember { mutableStateOf<List<String>>(emptyList()) }
+    var loading by remember { mutableStateOf(true) }
+
+    // Fetch places from Firestore
+    LaunchedEffect(Unit) {
+        fetchPlacesFromFirestore { fetchedPlaces ->
+            places = fetchedPlaces
+            loading = false
+        }
+    }
+
     Scaffold(
         topBar = { TopAppBar(title = { Text("Trip Details") }) }
     ) { innerPadding ->
@@ -151,3 +163,17 @@ val trip = Trip(
     endDate = 1702598400L,
     placesOfInterest = listOf(place1, place2, place3)
 )
+// Function to fetch all places from Firestore
+fun fetchPlacesFromFirestore(onComplete: (List<String>) -> Unit) {
+    val db = FirebaseFirestore.getInstance()
+    val placesRef = db.collection("places")
+
+    placesRef.get()
+        .addOnSuccessListener { querySnapshot ->
+            val placesList = querySnapshot.documents.mapNotNull { it.getString("PlacesID") }
+            onComplete(placesList) // Pass the fetched places to the callback
+        }
+        .addOnFailureListener {
+            onComplete(emptyList()) // Handle failure by returning an empty list
+        }
+}

@@ -55,8 +55,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0")) //Var 33.5.1 før
     implementation("com.google.firebase:firebase-auth:21.0.5")
+    implementation("com.google.firebase:firebase-firestore")
+    implementation ("com.google.firebase:firebase-firestore-ktx")
+
 
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
