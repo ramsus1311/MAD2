@@ -70,7 +70,7 @@ fun TravelApp() {
                     )
                 } ?: User("Unknown", "Unknown", "Unknown") // Provide default non-null user
 
-                ProfileScreen(navController = navController, user = user)
+                ProfileScreen(navController = navController)
             }
         }
     }
