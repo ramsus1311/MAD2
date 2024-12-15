@@ -1,8 +1,5 @@
-package com.example.travelapp
+package com.example.mad2
 
-
-import ProfileScreen
-import com.example.data.models.User
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,22 +10,29 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Search // For Explore
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.travelapp.screens.*
+import com.example.mad2.model.User
+import com.example.mad2.network.GeoapifyApiHelper
+import com.example.mad2.screens.HomeScreen
+import com.example.mad2.screens.LoginScreen
+import com.example.mad2.screens.PlanTripScreen
+import com.example.mad2.screens.ProfileScreen
+import com.example.mad2.screens.TripDetailsScreen
 import com.google.firebase.auth.FirebaseAuth
-import androidx.compose.runtime.LaunchedEffect // Import LaunchedEffect
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +48,7 @@ fun TravelApp() {
     val navController = rememberNavController()
     val auth = FirebaseAuth.getInstance()
     val currentUser = auth.currentUser
+    val geoapifyApiHelper = remember { GeoapifyApiHelper("97c1c34c94dd4ee7968e556e2c36ed33") }
 
     // Declare state using mutableStateOf, without 'by'
     val startDestination = remember { mutableStateOf("login") }
@@ -69,7 +74,7 @@ fun TravelApp() {
         ) {
             composable("home") { HomeScreen(navController) }
             composable("tripDetails") { TripDetailsScreen(navController) }
-            composable("planTrip") { PlanTripScreen(navController) }
+            composable("planTrip") { PlanTripScreen(navController, geoapifyApiHelper) }
             composable("login") {
                 LoginScreen(auth = auth, navController = navController)
             }
@@ -83,7 +88,6 @@ fun TravelApp() {
         }
     }
 }
-
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
@@ -119,4 +123,4 @@ fun BottomNavigationBar(navController: NavController) {
     }
 }
 
-data class BottomNavItem(val route: String, val title: String, val icon: androidx.compose.ui.graphics.vector.ImageVector)
+data class BottomNavItem(val route: String, val title: String, val icon: ImageVector)

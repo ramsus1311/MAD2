@@ -1,3 +1,5 @@
+package com.example.mad2.screens
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -16,14 +18,15 @@ import androidx.compose.ui.res.painterResource
 import com.example.travelapp.R
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import com.example.data.models.User
+import com.example.mad2.model.User
 import com.example.mad2.ui.theme.MAD2Theme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(navController: NavHostController,
-                  user: User) {
+                  user: User
+) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Profile") }) }
     ) { innerPadding ->

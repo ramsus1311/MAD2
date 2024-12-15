@@ -1,4 +1,4 @@
-package com.example.travelapp.screens
+package com.example.mad2.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

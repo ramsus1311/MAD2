@@ -1,4 +1,4 @@
-package com.example.data.models
+package com.example.mad2.model
 
 data class User(
     val name: String,
