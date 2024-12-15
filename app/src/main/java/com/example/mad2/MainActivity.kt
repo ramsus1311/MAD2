@@ -32,6 +32,7 @@ import com.example.mad2.screens.LoginScreen
 import com.example.mad2.screens.PlanTripScreen
 import com.example.mad2.screens.ProfileScreen
 import com.example.mad2.screens.TripDetailsScreen
+import com.example.mad2.screens.TripListScreen
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
@@ -62,13 +63,13 @@ fun TravelApp() {
             modifier = Modifier.padding(paddingValues)
         ) {
             composable("home") { HomeScreen(navController) }
-            composable("tripDetails") { TripDetailsScreen(navController) }
+            composable("tripDetails") { TripListScreen(navController) }
             composable("planTrip") { PlanTripScreen(navController, geoapifyApiHelper) }
             composable("login") {
                 LoginScreen(auth = auth, navController = navController)
             }
             composable("profile") {
-                val user = currentUser?.let {
+                currentUser?.let {
                     User(
                         name = it.displayName ?: "Unknown",
                         email = it.email ?: "Unknown",

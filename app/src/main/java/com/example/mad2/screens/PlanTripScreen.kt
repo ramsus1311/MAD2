@@ -22,6 +22,7 @@ import com.example.mad2.components.DatePickerComponent
 import com.example.mad2.model.CityDetails
 import com.example.mad2.model.PlaceOfInterest
 import com.example.mad2.network.GeoapifyApiHelper
+import com.google.firebase.firestore.FirebaseFirestore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
