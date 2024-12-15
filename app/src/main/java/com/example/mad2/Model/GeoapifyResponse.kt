@@ -1,18 +1,23 @@
 package com.example.travelapp.network
 
 data class GeoapifyResponse(
-    val results: List<Place>
+    val features: List<GeoapifyGeocodeResult>
 )
 
 data class Place(
-    val formatted: String
+    val formatted: String,   // Full address (e.g., "New York, Krunska, 11000 Belgrade, Serbia")
+    val place_id: String,    // Unique place identifier (ID)
 )
 
 data class GeoapifyGeocodeResponse(
-    val results: List<GeoapifyGeocodeResult>
+    val features: List<GeoapifyGeocodeResult>
 )
 
 data class GeoapifyGeocodeResult(
-    val place_id: String,  // The city ID (place_id)
-    val formatted: String  // The formatted city name
+    val properties: Properties
+)
+
+data class Properties(
+    val formatted: String,   // Full address (e.g., "New York, Krunska, 11000 Belgrade, Serbia")
+    val place_id: String,
 )

@@ -58,6 +58,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     implementation("com.google.firebase:firebase-auth:21.0.5")
 
+    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+
     // Material for Compose UI
     implementation("androidx.compose.material:material")
     implementation(libs.firebase.auth.ktx)
