@@ -7,7 +7,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.example.travelapp.R
 import com.example.mad2.model.User
@@ -15,7 +14,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,9 +37,6 @@ fun ProfileScreen(navController: NavHostController) {
                         name = document.getString("name") ?: ""
                         phoneNumber = document.getString("phoneNumber") ?: ""
                     }
-                }
-                .addOnFailureListener {
-                    // Handle failure (e.g., log error)
                 }
         }
     }
@@ -69,10 +64,9 @@ fun ProfileScreen(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Text(text = "Email: $email", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(16.dp))
+                Text(text = "$email", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(16.dp))
 
                 if (isEditing) {
-                    // Editable fields
                     TextField(
                         value = name,
                         onValueChange = { name = it },
@@ -100,9 +94,8 @@ fun ProfileScreen(navController: NavHostController) {
                         Text(text = "Save", color = Color.White)
                     }
                 } else {
-                    // Display fields
-                    Text(text = "Name: $name", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(16.dp))
-                    Text(text = "Phone: $phoneNumber", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(16.dp))
+                    Text(text = "$name", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(16.dp))
+                    Text(text = "$phoneNumber", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(16.dp))
 
                     Button(
                         onClick = { isEditing = true },
@@ -117,7 +110,6 @@ fun ProfileScreen(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                // Logout Button
                 Button(
                     onClick = {
                         FirebaseAuth.getInstance().signOut()
@@ -147,13 +139,5 @@ fun saveUserProfile(user: User) {
         "name" to user.name,
         "phoneNumber" to user.phoneNumber
     )
-
-    userRef.set(userMap)
-        .addOnSuccessListener {
-            // Handle success
-        }
-        .addOnFailureListener {
-            // Handle failure
-        }
 }
 

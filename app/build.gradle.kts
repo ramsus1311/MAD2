@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.travelapp" // Update to match your package structure
+    namespace = "com.example.travelapp"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.travelapp" // Update to match your package structure
+        applicationId = "com.example.travelapp"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -55,7 +55,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(platform("com.google.firebase:firebase-bom:33.7.0")) //Var 33.5.1 før
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-auth:21.0.5")
     implementation("com.google.firebase:firebase-firestore")
     implementation ("com.google.firebase:firebase-firestore-ktx")
@@ -64,18 +64,14 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
-    // Material for Compose UI
     implementation("androidx.compose.material:material")
     implementation(libs.firebase.auth.ktx)
     val nav_version = "2.8.3"
-    // Navigation for Jetpack Compose
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
-    // Compose UI dependencies
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
 
-    // Testing
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -93,17 +89,13 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
 
-// Retrofit for networking
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-// Gson for JSON parsing
     implementation("com.google.code.gson:gson:2.8.9")
 
-    // Jetpack Navigation
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
-    // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
 
     testImplementation(libs.junit)

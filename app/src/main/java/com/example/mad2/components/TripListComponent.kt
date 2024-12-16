@@ -16,11 +16,11 @@ import com.example.mad2.model.Trip
 
 @Composable
 fun TripListComponent(
-    trips: MutableState<List<Trip?>>,
+    trips: List<Trip>,
     onTripSelect: (Trip) -> Unit,
     onDeleteTrip: (Trip) -> Unit
 ) {
-    Row (modifier = Modifier.padding(8.dp)){
+    Row(modifier = Modifier.padding(8.dp)) {
         Text(
             text = "Trips",
             style = MaterialTheme.typography.bodyLarge,
@@ -31,16 +31,13 @@ fun TripListComponent(
     }
     HorizontalDivider(thickness = 2.dp, color = Color.Black)
     LazyColumn {
-        items(trips.value) { trip ->
-            if (trip != null) {
-                TripListItem(
-                    trip = trip,
-                    onSelect = onTripSelect,
-                    onDelete = { onDeleteTrip(trip) }
-                )
-            }
+        items(trips) { trip ->
+            TripListItem(
+                trip = trip,
+                onSelect = onTripSelect,
+                onDelete = { onDeleteTrip(trip) }
+            )
             HorizontalDivider(color = Color.Black, thickness = 1.dp)
         }
-
     }
 }

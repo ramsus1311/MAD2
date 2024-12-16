@@ -14,9 +14,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -50,7 +48,6 @@ fun TravelApp() {
     val currentUser = auth.currentUser
     val geoapifyApiHelper = remember { GeoapifyApiHelper("97c1c34c94dd4ee7968e556e2c36ed33") }
 
-    // Handle start destination based on user authentication status
     val startDestination = if (currentUser != null) "home" else "login"
 
     Scaffold(
@@ -58,7 +55,7 @@ fun TravelApp() {
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = startDestination, // Directly use the computed destination
+            startDestination = startDestination,
             modifier = Modifier.padding(paddingValues)
         ) {
             composable("home") { HomeScreen(navController) }
@@ -74,7 +71,7 @@ fun TravelApp() {
                         email = it.email ?: "Unknown",
                         phoneNumber = it.phoneNumber ?: "Unknown"
                     )
-                } ?: User("Unknown", "Unknown", "Unknown") // Provide default non-null user
+                } ?: User("Unknown", "Unknown", "Unknown")
 
                 ProfileScreen(navController = navController)
             }
@@ -103,7 +100,6 @@ fun BottomNavigationBar(navController: NavController) {
                 onClick = {
                     if (currentDestination != item.route) {
                         navController.navigate(item.route) {
-                            // Save and restore state for better navigation performance
                             popUpTo(navController.graph.startDestinationId) {
                                 saveState = true
                             }

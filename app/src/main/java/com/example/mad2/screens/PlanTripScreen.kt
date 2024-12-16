@@ -30,7 +30,7 @@ import java.util.UUID
 @Composable
 fun PlanTripScreen(navController: NavHostController, geoapifyApiHelper: GeoapifyApiHelper) {
     var query by remember { mutableStateOf("") }
-    var cities by remember { mutableStateOf<List<CityDetails>>(emptyList()) }  // Search query
+    var cities by remember { mutableStateOf<List<CityDetails>>(emptyList()) }
     var placesOfInterest by remember { mutableStateOf<List<PlaceOfInterest>>(emptyList()) }
     var selectedCity by remember { mutableStateOf<CityDetails?>(null) }
     var isLoading by remember { mutableStateOf(false) }
