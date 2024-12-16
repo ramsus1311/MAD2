@@ -14,6 +14,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import android.util.Log
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -139,5 +141,14 @@ fun saveUserProfile(user: User) {
         "name" to user.name,
         "phoneNumber" to user.phoneNumber
     )
+
+    userRef.set(userMap)
+        .addOnSuccessListener {
+            Log.d("Firestore", "User profile updated successfully.")
+        }
+        .addOnFailureListener { e ->
+            Log.e("Firestore", "Error updating user profile: ${e.localizedMessage}")
+        }
 }
+
 
